@@ -1,0 +1,24 @@
+/* ==========================================================================
+   TRANSITIONS & ANIMATIONS (Section Required File Structure)
+   ========================================================================== */
+
+/* Smooth fade for general theme switching */
+.task-card, .modal-overlay, .progress-bar-fill, .board-column, body {
+    transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease, opacity 0.2s ease;
+}
+
+/* Entry animation for newly added or rendered task cards */
+@keyframes fadeInCard {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.task-card {
+    animation: fadeInCard 0.25s ease-out forwards;
+}

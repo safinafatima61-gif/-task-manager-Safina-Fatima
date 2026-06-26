@@ -1,0 +1,56 @@
+/* ==========================================================================
+   DARK MODE COLORS OVERRIDES (Section H)
+   ========================================================================== */
+html.dark-theme {
+    --bg-primary: #0f172a;
+    --bg-surface: #1e293b;
+    --border-color: #334155;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+}
+
+html.dark-theme .board-column {
+    background-color: #111827;
+}
+
+html.dark-theme .count-badge {
+    background-color: #334155;
+    color: #f8fafc;
+}
+
+html.dark-theme .tag-pill {
+    background-color: #334155;
+    color: #cbd5e1;
+}
+
+html.dark-theme .form-tag-pill {
+    background-color: #334155;
+    color: #f8fafc;
+}
+
+html.dark-theme .btn-secondary {
+    background-color: #334155;
+    color: #cbd5e1;
+}
+
+html.dark-theme .btn-secondary:hover {
+    background-color: #475569;
+}
+
+html.dark-theme .task-card {
+    background-color: #1e293b;
+    border-color: #334155;
+}
+
+html.dark-theme .task-card.completed-card-treatment {
+    background-color: #111827;
+}
+
+html.dark-theme form input[type="text"], 
+html.dark-theme form input[type="date"], 
+html.dark-theme form select, 
+html.dark-theme form textarea {
+    background-color: #1e293b;
+    border-color: #334155;
+    color: #f8fafc;
+}
