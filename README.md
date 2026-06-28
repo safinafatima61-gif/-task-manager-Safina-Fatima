@@ -1,28 +1,9 @@
-   First I creat the basic struture  of task manager  project  
-   
-   task-manager/
-├── index.html          (Main HTML file) [cite: 175]
-├── README.md           (Documentation) [cite: 198]
-├── css/
-│   ├── style.css       (Main layout & styles) [cite: 178, 188]
-│   ├── dark-mode.css   (Dark mode theme overrides) [cite: 179, 189]
-│   └── animations.css  (Transitions & animations) [cite: 180, 190]
-└── js/
-    ├── app.js          (Main entry point & initialization) [cite: 181, 191]
-    ├── storage.js      (localStorage read/write logic) [cite: 182, 192]
-    ├── tasks.js        (Task CRUD operations) [cite: 183, 193]
-    ├── board.js        (Rendering columns and cards) [cite: 184, 194]
-    ├── filters.js      (Search, filter, and sort logic) [cite: 185, 195]
-    ├── stats.js        (Statistics bar updates) [cite: 186, 196]
-    └── ui.js           (Modals, dark mode toggle, etc.) [cite: 187, 197]
-
-
-    # Zenith Kanban - Interactive Task Manager
+# Zenith Kanban - Interactive Task Manager
 
 Zenith Kanban is a modern, responsive project management board designed to help users streamline their daily workflows in real-time. Built using vanilla JavaScript and structured into modular files, it allows users to create, sort, filter, and track tasks dynamically across customized progress columns. The application automatically calculates performance metrics and safely syncs all task data locally so you never lose your progress.
 
 ## Live Demo
-🔗 **[Click here to view the Live Project](https://your-username.github.io/task-manager/)** *(Deployed via GitHub Pages)*
+🔗 **[Click here to view the Live Project]https://safinafatima61-gif.github.io/-task-manager-Safina-Fatima/
 
 ---
 
@@ -41,7 +22,7 @@ Zenith Kanban is a modern, responsive project management board designed to help 
 > **Note:** Replace the placeholder images below with your actual screenshot paths once you take them!
 
 ### 1. Desktop Board Layout View
-![Desktop Board with Active Tasks](css/screenshots/desktop-board.png)
+![Desktop Board with Active Tasks] ![alt text](<Desktop board with task.png>)
 
 ### 2. Mobile Responsive Tab View
 ![Mobile Adaptive Grid Layout](css/screenshots/mobile-view.png)
@@ -75,11 +56,14 @@ Here is the exact task object blueprint processed by the application logic insid
   "dateCreated": "2026-06-28T10:11:21.000Z"
 }
 
-## Required Task Data Structure
+
+
+
+  ## Required Task Data Structure
 Each task is stored as a JavaScript object in a flat array following the exact schema required:
 
-// Array of task objects stored in localStorage under 'tasks'
-const tasks = [
+```javascript
+const tasks = 
   {
     id: 1703001234567,       // Date.now() at creation time
     title: 'Build the login page',
@@ -90,29 +74,10 @@ const tasks = [
     tags: ['HTML', 'CSS', 'JS'],
     createdAt: 1703001234567 // Date.now() at creation time
   }
-];
-
-##How to Run This Project Locally
-Follow these simple step-by-step instructions to get the project running on your computer:
-
-Download or Clone the Files:
-Clone this repository using git:  link 
-git clone [https://github.com/your-username/task-manager.git](https://github.com/your-username/task-manager.git)
-Alternatively, just download the ZIP archive file directly from GitHub and extract it to your desktop.
-
-##Navigate into the Project Folder:
-
-Bash
-cd task-manager
-  
 
 
 
-
-
-
-
-Launch the Interface App:
+3. Launch the Interface App
 Since this application uses pure vanilla front-end technologies without any complex build tools, you do not need to install any heavy dependencies.
 
 Simply double-click the index.html file to open it directly in your favorite web browser.
@@ -124,8 +89,25 @@ Building this project was a huge learning curve for me. Managing a multi-file ar
 
 I ran into a lot of bugs where the DOM wouldn't re-render properly after actions, or data would sync to localStorage but disappear from the screen. Solving this taught me how important structured design patterns are; I had to build a central sync function (syncInterfaceData) that completely acts as a single source of truth. Figuring out how to build the dynamic tag-chip inputs using just raw keyboard event listeners was also an amazing confidence booster!
 
-
 Video Walkthrough Demonstration
 🎥 Watch the full 4-Minute Feature Walkthrough Video on YouTube
 
 This video walks through the entire live application showing how to create a new task, trigger validation errors, search/filter items, toggle dark mode, and verify local data retention after refreshing.
+
+
+### Iske baad terminal mein ye chala dein:
+Jab aap text change kar lein, toh terminal mein ye 3 commands chala kar GitHub par update kar dein:
+```bash
+git add README.md
+git commit -m "Fixed README markdown colors"
+git push origin main --force
+
+##How to Run This Project Locally
+Follow these simple step-by-step instructions to get the project running on your computer:
+
+Download or Clone the Files:
+Clone this repository using git:  link 
+git clone  https://github.com/safinafatima61-gif/-task-manager-Safina-Fatima.git
+
+
+
