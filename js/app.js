@@ -1,23 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 document.addEventListener('DOMContentLoaded', () => {
     // Direct requirements wale format 'tasks' key se localStorage read karna
     let allTasks = JSON.parse(localStorage.getItem('tasks')) || [];
@@ -184,3 +164,100 @@ document.addEventListener('DOMContentLoaded', () => {
 
     syncInterfaceData();
 });
+
+    document.addEventListener('click', (e) => {
+        const btn = e.target.closest('.open-modal-btn');
+        if (btn) {
+            e.preventDefault();
+            let colAttr = btn.getAttribute('data-column') || btn.dataset.column;
+            let targetCol = 'todo';
+            if(colAttr === 'In Progress' || colAttr === 'inprogress') targetCol = 'inprogress';
+            if(colAttr === 'Done' || colAttr === 'done') targetCol = 'done';
+            UIController.openTaskModal(targetCol);
+        }
+    });
+
+
+
+
+
+
+
+
+    document.getElementById('taskForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const id = document.getElementById('taskId').value;
+        const titleInput = document.getElementById('taskTitle');
+        const descriptionInput = document.getElementById('taskDescription');
+        const priorityInput = document.getElementById('taskPriority');
+        const dueDateInput = document.getElementById('taskDueDate');
+        const columnInput = document.getElementById('taskColumn');
+
+        const title = titleInput.value.trim();
+        const description = descriptionInput.value.trim();
+        const priorityValue = priorityInput.value;
+        const dueDate = dueDateInput.value;
+        const columnValue = columnInput.value;
+        
+        let isValid = true;
+        
+        // Mobile screen par layout validation checks safely target karne ke liye
+        if (title.length < 3) {
+            titleInput.parentElement.classList.add('has-error');
+            isValid = false;
+        } else {
+            titleInput.parentElement.classList.remove('has-error');
+        }
+
+        if (!dueDate) {
+            dueDateInput.parentElement.classList.add('has-error');
+            isValid = false;
+        } else {
+            dueDateInput.parentElement.classList.remove('has-error');
+        }
+
+        if (!isValid) return;
+
+        let targetCol = 'todo';
+        if (columnValue === 'In Progress' || columnValue === 'inprogress') targetCol = 'inprogress';
+        if (columnValue === 'Done' || columnValue === 'done') targetCol = 'done';
+
+        if (id) {
+            const numericId = parseInt(id);
+            const idx = allTasks.findIndex(t => t.id === numericId || t.id == id);
+            if (idx !== -1) {
+                allTasks[idx] = { 
+                    ...allTasks[idx], 
+                    title, 
+                    description, 
+                    priority: priorityValue.toLowerCase(), 
+                    dueDate, 
+                    column: targetCol, 
+                    tags: [...UIController.currentTags] 
+                };
+            }
+            UIController.closeTaskModal();
+        } else {
+            const timestamp = Date.now();
+            const newTask = {
+                id: timestamp,
+                title: title,
+                description: description,
+                priority: priorityValue.toLowerCase(),
+                column: targetCol,
+                dueDate: dueDate,
+                tags: [...UIController.currentTags],
+                createdAt: timestamp
+            };
+            allTasks.push(newTask);
+            UIController.closeTaskModal();
+            
+            // Mobile standard scroll adjustment to avoid layout locking
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            UIController.openSuccessModal();
+        }
+
+        localStorage.setItem('tasks', JSON.stringify(allTasks));
+        syncInterfaceData();
+    });
