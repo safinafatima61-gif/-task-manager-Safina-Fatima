@@ -45,9 +45,7 @@ Zenith Kanban is a modern, responsive project management board designed to help 
 ---
 
 ## Data Structure Example
-Here is the exact task object blueprint processed by the application logic inside our controllers:
-
-```json
+Here is the exact task object blueprint processed by the application logic inside our controlle
 {
   "id": "task_1719574281000",
   "title": "Fix mobile tab overflow issues",
@@ -65,7 +63,7 @@ Here is the exact task object blueprint processed by the application logic insid
   ## Required Task Data Structure
 Each task is stored as a JavaScript object in a flat array following the exact schema required:
 
-```javascript
+javascript
 const tasks = 
   {
     id: 1703001234567,       // Date.now() at creation time
@@ -100,7 +98,7 @@ This video walks through the entire live application showing how to create a new
 
 ### Iske baad terminal mein ye chala dein:
 Jab aap text change kar lein, toh terminal mein ye 3 commands chala kar GitHub par update kar dein:
-```bash
+bash
 git add README.md
 git commit -m "Fixed README markdown colors"
 git push origin main --force
