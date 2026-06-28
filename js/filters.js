@@ -1,23 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 const FilterController = {
     filterAndSort(tasks, searchQuery, priorityFilter, sortBy) {
         let filtered = [...tasks];

@@ -1,10 +1,3 @@
-
-
-
-
-
-
-
 const TaskController = {
     createTaskObject(title, description, priority, dueDate, tags, column) {
         return {

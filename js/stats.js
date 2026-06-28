@@ -1,9 +1,3 @@
-
-
-
-
-
-
 const StatsController = {
     updateDashboardStats(tasks) {
         const total = tasks.length;

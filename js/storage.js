@@ -1,9 +1,3 @@
-
-
-
-
-
-
 const StorageController = {
     getTasks() {
         const tasks = localStorage.getItem('zenith_kanban_tasks');
@@ -19,4 +13,15 @@ const StorageController = {
         localStorage.setItem('zenith_kanban_theme', theme);
     }
 };
+
+
+
+
+
+
+
+
+
+
+
 
