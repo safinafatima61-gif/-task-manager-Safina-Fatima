@@ -3,8 +3,9 @@
 Zenith Kanban is a modern, responsive project management board designed to help users streamline their daily workflows in real-time. Built using vanilla JavaScript and structured into modular files, it allows users to create, sort, filter, and track tasks dynamically across customized progress columns. The application automatically calculates performance metrics and safely syncs all task data locally so you never lose your progress.
 
 ## Live Demo
-🔗 **[Click here to view the Live Project]https://safinafatima61-gif.github.io/-task-manager-Safina-Fatima/
-
+🔗 **[Click here to view the Live Project]https://safinafatima61-gif.github.io/-task-manager-Safina-Fatima/   git
+## Live Link: [ safina-task-manager.netlify.app] 
+ Netlify Note: 
 ---
 
 ## Core Features Implemented
@@ -25,10 +26,10 @@ Zenith Kanban is a modern, responsive project management board designed to help 
 ![Desktop Board with Active Tasks] ![alt text](<Desktop board with task.png>)
 
 ### 2. Mobile Responsive Tab View
-![Mobile Adaptive Grid Layout](css/screenshots/mobile-view.png)
+![Mobile Adaptive Grid Layout]![alt text](<Mobile responsive task show.png>)
 
 ### 3. Interactive Task Creator Modal Window
-![Modal Editor Overlay with Validations](css/screenshots/modal-open.png)
+![Modal Editor Overlay with Validations]![alt text](<modal view project.png>)
 
 ---
 
