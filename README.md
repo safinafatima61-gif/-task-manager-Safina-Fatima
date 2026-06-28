@@ -21,9 +21,11 @@ Zenith Kanban is a modern, responsive project management board designed to help 
 
 ## Application Screenshots
 > **Note:** Replace the placeholder images below with your actual screenshot paths once you take them!
+> <img width="1451" height="896" alt="image" src="https://github.com/user-attachments/assets/7f8d3b0a-54f8-45d3-8da9-627159d58482" />
+
 
 ### 1. Desktop Board Layout View
-![Desktop Board with Active Tasks] ![alt text](<Desktop board with task.png>)
+![Desktop Board with Active Tasks]![alt text](<desktop view.png>) 
 
 ### 2. Mobile Responsive Tab View
 ![Mobile Adaptive Grid Layout]![alt text](<Mobile responsive task show.png>)
