@@ -1,95 +1,130 @@
-// ==========================================================================
-// RENDERING LAYER (BoardRenderer)
-// Dynamically constructs and updates HTML task card structures inside columns
-// ==========================================================================
-
-const BoardRenderer = {
-    // Renders the board view based on processed filter parameters
-    render: function() {
-        const visibleTasks = FilterManager.getFilteredAndSortedTasks();
-
-        // Target column list containers from index.html
-        const containers = {
-            todo: document.getElementById('todo-tasks'),
-            inprogress: document.getElementById('inprogress-tasks'),
-            done: document.getElementById('done-tasks')
-        };
-
-        // Target column summary numeric indicators from index.html
-        const counters = {
-            todo: document.getElementById('todo-count'),
-            inprogress: document.getElementById('inprogress-count'),
-            done: document.getElementById('done-count')
-        };
-
-        // Clear previous state artifacts to prevent duplicate appended DOM nodes
-        Object.keys(containers).forEach(col => {
-            if (containers[col]) containers[col].innerHTML = '';
-            if (counters[col]) counters[col].textContent = '0';
+const BoardController = {
+    renderBoard(filteredTasks) {
+        const todoList = document.getElementById('listTodo');
+        const progressList = document.getElementById('listProgress');
+        const doneList = document.getElementById('listDone');
+        
+        todoList.innerHTML = '';
+        progressList.innerHTML = '';
+        doneList.innerHTML = '';
+        
+        filteredTasks.forEach(task => {
+            const card = this.createTaskCardDOM(task);
+            if (task.column === 'To Do') todoList.appendChild(card);
+            else if (task.column === 'In Progress') progressList.appendChild(card);
+            else if (task.column === 'Done') doneList.appendChild(card);
         });
+    },
+        createTaskCardDOM(task) {
+        const isOverdue = TaskController.isOverdue(task.dueDate, task.column);
+        const remainsText = TaskController.getDaysRemainingText(task.dueDate, task.column);
+        
+        const card = document.createElement('div');
+        // Is line ko change kiya hai taaki 'Done' wale task par alag class lag sake
+        card.className = `task-card ${task.column === 'Done' ? 'task-done' : ''}`;
+        card.dataset.id = task.id;
+        let dateHtml = '';
+        if (task.dueDate) {
+            const formattedDate = new Date(task.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            dateHtml = `<div class="date-line"><i class="fa-regular fa-calendar"></i> ${formattedDate}</div>`;
+        }
 
-        const counts = { todo: 0, inprogress: 0, done: 0 };
-        const todayStr = new Date().toISOString().split('T')[0];
+        let remainsHtml = '';
+        if (remainsText) {
+            const remainsClass = isOverdue ? 'days-overdue' : 'days-remaining';
+            remainsHtml = `<div class="${remainsClass}">${remainsText}</div>`;
+        }
+        
+        const tagsHtml = task.tags.map(tag => `<span class="tag-badge">${tag}</span>`).join('');
 
-        // Loop over processed data structures and generate explicit HTML cards
-        visibleTasks.forEach(task => {
-            if (!containers[task.column]) return;
-
-            counts[task.column]++;
-
-            const card = document.createElement('div');
-            card.className = 'task-card';
-            card.dataset.id = task.id;
-
-            // Apply special UI treatments based on system rule assertions
-            const isOverdue = task.column !== 'done' && task.dueDate < todayStr;
-            if (isOverdue) card.classList.add('overdue-card-treatment');
-            if (task.column === 'done') card.classList.add('completed-card-treatment');
-
-            // Format date presentation string nicely (e.g., Aug 28, 2026)
-            const parts = task.dueDate.split('-');
-            let dateString = task.dueDate;
-            if (parts.length === 3) {
-                const dateObj = new Date(parts[0], parts[1] - 1, parts[2]);
-                dateString = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-            }
-
-            // Construct standard inner layout block following assignment preview scheme
-            card.innerHTML = `
-                <div class="card-header">
-                    <span class="task-title">
-                        ${task.column === 'done' ? '<i class="fa-solid fa-circle-check completed-icon"></i>' : ''}
-                        ${task.title}
-                    </span>
-                    <div class="badge-group">
-                        <span class="badge badge-${task.priority}">${task.priority}</span>
-                        ${isOverdue ? '<span class="badge badge-overdue">Overdue</span>' : ''}
-                    </div>
+        card.innerHTML = `
+            <div class="card-top-row">
+                <h3>${task.title}</h3>
+                <span class="priority-badge priority-${task.priority.toLowerCase()}">${task.priority}</span>
+            </div>
+            <p>${task.description || 'No description.'}</p>
+            <div class="task-tags">${tagsHtml}</div>
+            <div class="task-meta">
+                <div class="task-date">
+                    ${dateHtml}
+                    ${remainsHtml}
                 </div>
-                <p class="task-desc">${task.description || '<i>No description provided.</i>'}</p>
-                <div class="tags-wrapper">
-                    ${task.tags.map(tag => `<span class="tag-pill">${tag}</span>`).join('')}
+                <div class="task-actions">
+                    ${task.column !== 'To Do' ? `<button class="action-btn move-left-btn" title="Move Left"><i class="fa-solid fa-arrow-left"></i></button>` : ''}
+                    <button class="action-btn edit-task-btn" title="Edit"><i class="fa-solid fa-pen"></i></button>
+                    <button class="action-btn delete-btn delete-task-btn" title="Delete"><i class="fa-solid fa-trash-can"></i></button>
+                    ${task.column !== 'Done' ? `<button class="action-btn move-right-btn" title="Move Right"><i class="fa-solid fa-arrow-right"></i></button>` : ''}
                 </div>
-                <div class="card-footer">
-                    <span class="task-date"><i class="fa-regular fa-calendar"></i> ${dateString}</span>
-                    <div class="card-actions">
-                        ${task.column !== 'todo' ? `<button class="action-btn move-left-btn" title="Move Left"><i class="fa-solid fa-arrow-left"></i></button>` : ''}
-                        <button class="action-btn edit-btn" title="Edit Task"><i class="fa-solid fa-pencil"></i></button>
-                        <button class="action-btn delete-btn" title="Delete Task"><i class="fa-solid fa-trash"></i></button>
-                        ${task.column !== 'done' ? `<button class="action-btn move-right-btn" title="Move Right"><i class="fa-solid fa-arrow-right"></i></button>` : ''}
-                    </div>
-                </div>
-            `;
+            </div>
+        `;
+        return card;
+    }
+};
 
-            containers[task.column].appendChild(card);
+
+const BoardController = {
+    renderBoard(filteredTasks) {
+        const todoList = document.getElementById('listTodo');
+        const progressList = document.getElementById('listProgress');
+        const doneList = document.getElementById('listDone');
+        
+        todoList.innerHTML = '';
+        progressList.innerHTML = '';
+        doneList.innerHTML = '';
+        
+        filteredTasks.forEach(task => {
+            const card = this.createTaskCardDOM(task);
+            if (task.column === 'todo') todoList.appendChild(card);
+            else if (task.column === 'inprogress') progressList.appendChild(card);
+            else if (task.column === 'done') doneList.appendChild(card);
         });
+    },
 
-        // Sync numerical counters assigned next to headers
-        Object.keys(counters).forEach(col => {
-            if (counters[col]) counters[col].textContent = counts[col];
-        });
+    createTaskCardDOM(task) {
+        // Overdue aur remaining text checking
+        const isOverdue = TaskController.isOverdue ? TaskController.isOverdue(task.dueDate, task.column) : false;
+        const remainsText = TaskController.getDaysRemainingText ? TaskController.getDaysRemainingText(task.dueDate, task.column) : '';
+        
+        const card = document.createElement('div');
+        // 'done' task par automatically .task-done class lagayega line-through ke liye
+        card.className = `task-card ${task.column === 'done' ? 'task-done' : ''}`;
+        card.dataset.id = task.id;
+        
+        let dateHtml = '';
+        if (task.dueDate) {
+            const formattedDate = new Date(task.dueDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            dateHtml = `<div class="date-line"><i class="fa-regular fa-calendar"></i> ${formattedDate}</div>`;
+        }
 
-        // Trigger updates down to metrics view component
-        StatsManager.updateDashboard();
+        let remainsHtml = '';
+        if (remainsText) {
+            const remainsClass = isOverdue ? 'days-overdue' : 'days-remaining';
+            remainsHtml = `<div class="${remainsClass}">${remainsText}</div>`;
+        }
+        
+        const tagsHtml = task.tags ? task.tags.map(tag => `<span class="tag-badge">${tag}</span>`).join('') : '';
+        const priorityDisplay = task.priority ? task.priority.toUpperCase() : 'LOW';
+
+        card.innerHTML = `
+            <div class="card-top-row">
+                <h3>${task.title}</h3>
+                <span class="priority-badge priority-${task.priority ? task.priority.toLowerCase() : 'low'}">${priorityDisplay}</span>
+            </div>
+            <p>${task.description || 'No description.'}</p>
+            <div class="task-tags">${tagsHtml}</div>
+            <div class="task-meta">
+                <div class="task-date">
+                    ${dateHtml}
+                    ${remainsHtml}
+                </div>
+                <div class="task-actions">
+                    ${task.column !== 'todo' ? `<button class="action-btn move-left-btn" title="Move Left"><i class="fa-solid fa-arrow-left"></i></button>` : ''}
+                    <button class="action-btn edit-task-btn" title="Edit"><i class="fa-solid fa-pen"></i></button>
+                    <button class="action-btn delete-btn delete-task-btn" title="Delete"><i class="fa-solid fa-trash-can"></i></button>
+                    ${task.column !== 'done' ? `<button class="action-btn move-right-btn" title="Move Right"><i class="fa-solid fa-arrow-right"></i></button>` : ''}
+                </div>
+            </div>
+        `;
+        return card;
     }
 };

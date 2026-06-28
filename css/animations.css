@@ -1,24 +1,29 @@
-/* ==========================================================================
-   TRANSITIONS & ANIMATIONS (Section Required File Structure)
-   ========================================================================== */
 
-/* Smooth fade for general theme switching */
-.task-card, .modal-overlay, .progress-bar-fill, .board-column, body {
-    transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease, opacity 0.2s ease;
+
+
+
+
+
+
+
+.fade-in {
+    animation: fadeIn 0.2s ease forwards;
+}
+.scale-up {
+    animation: scaleUp 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 
-/* Entry animation for newly added or rendered task cards */
-@keyframes fadeInCard {
-    from {
-        opacity: 0;
-        transform: translateY(12px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+@keyframes scaleUp {
+    from { transform: scale(0.85); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
 }
 
-.task-card {
-    animation: fadeInCard 0.25s ease-out forwards;
-}
+.spin-icon i { animation: spin 4s linear infinite; }
+@keyframes spin { 100% { transform: rotate(360deg); } }
+
+.blink-icon i { animation: blink 2s infinite; }
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }

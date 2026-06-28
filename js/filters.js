@@ -1,46 +1,55 @@
-// ==========================================================================
-// FILTER & SEARCH LAYER (FilterManager)
-// Processes search keywords, filters by priority, and handles sorting mechanics
-// ==========================================================================
 
-const FilterManager = {
-    // Filters and sorts the master task array based on live UI controls
-    getFilteredAndSortedTasks: function() {
-        // Create a shallow copy of the master array to avoid mutation bugs during sorting
-        let filteredTasks = [...TaskManager.getAllTasks()];
 
-        // 1. Text Search Filtering (Checks against Title, Description, and Tags array)
-        const searchQuery = document.getElementById('search-bar').value.toLowerCase().trim();
-        if (searchQuery) {
-            filteredTasks = filteredTasks.filter(task => 
-                task.title.toLowerCase().includes(searchQuery) || 
-                task.description.toLowerCase().includes(searchQuery) ||
-                task.tags.some(tag => tag.toLowerCase().includes(searchQuery))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const FilterController = {
+    filterAndSort(tasks, searchQuery, priorityFilter, sortBy) {
+        let filtered = [...tasks];
+        
+        if (searchQuery.trim() !== '') {
+            const query = searchQuery.toLowerCase();
+            filtered = filtered.filter(task => 
+                task.title.toLowerCase().includes(query) || 
+                task.description.toLowerCase().includes(query) ||
+                task.tags.some(tag => tag.toLowerCase().includes(query))
             );
         }
-
-        // 2. Dropdown Priority Filtering
-        const priorityFilter = document.getElementById('priority-filter').value;
-        if (priorityFilter !== 'all') {
-            filteredTasks = filteredTasks.filter(task => task.priority === priorityFilter);
+        
+        if (priorityFilter !== 'All') {
+            filtered = filtered.filter(task => task.priority === priorityFilter);
         }
-
-        // 3. Dropdown Sorting Engine
-        const sortBy = document.getElementById('sort-by').value;
-        filteredTasks.sort((a, b) => {
-            if (sortBy === 'due-soonest') {
-                // Ascending order: Dates closer to today appear first
+        
+        filtered.sort((a, b) => {
+            if (sortBy === 'newest') return new Date(b.dateCreated) - new Date(a.dateCreated);
+            if (sortBy === 'oldest') return new Date(a.dateCreated) - new Date(b.dateCreated);
+            if (sortBy === 'dueDate') {
+                if (!a.dueDate) return 1;
+                if (!b.dueDate) return -1;
                 return new Date(a.dueDate) - new Date(b.dueDate);
-            } else if (sortBy === 'priority-high') {
-                // Priority custom map comparison weight matrix
-                const priorityWeight = { high: 3, medium: 2, low: 1 };
-                return priorityWeight[b.priority] - priorityWeight[a.priority];
-            } else {
-                // Default: created-newest (Descending order of timestamps)
-                return b.createdAt - a.createdAt;
             }
+            if (sortBy === 'priority') {
+                const weights = { 'High': 3, 'Medium': 2, 'Low': 1 };
+                return weights[b.priority] - weights[a.priority];
+            }
+            return 0;
         });
-
-        return filteredTasks;
+        
+        return filtered;
     }
 };

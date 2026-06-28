@@ -1,203 +1,213 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kanban Task Manager</title>
-    
-    <script>
-        (function() {
-            const savedTheme = localStorage.getItem('theme') || 'light';
-            if (savedTheme === 'dark') {
-                document.documentElement.classList.add('dark-theme');
-            }
-        })();
-    </script>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>Zenith Kanban - Task Manager</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/dark-mode.css">
     <link rel="stylesheet" href="css/animations.css">
 </head>
 <body>
-
-    <header class="app-header">
-        <h1>Kanban Task Manager</h1>
-        <div class="header-actions">
-            <button id="theme-toggle" class="theme-btn" aria-label="Toggle Theme">
-                <i class="fa-solid fa-moon"></i> Theme
-            </button>
-            <button id="global-add-task-btn" class="btn btn-primary main-add-btn">
-                <i class="fa-solid fa-plus"></i> Add Task
-            </button>
-        </div>
-    </header>
-
-    <main class="app-container">
-        
-        <section class="dashboard-controls">
-            <div class="filter-bar">
-                <div class="search-wrapper">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" id="search-bar" placeholder="Search Tasks">
+    <div class="app-container">
+        <header class="main-header">
+            <div class="logo-area">
+                <div class="logo-icon"><i class="fa-solid fa-list-check"></i></div>
+                <div>
+                    <h1>Zenith Kanban</h1>
+                    <p>Streamline your workflow in real-time</p>
                 </div>
-                
-                <div class="filter-group">
-                    <select id="priority-filter">
-                        <option value="all">All Priorities</option>
-                        <option value="high">High</option>
-                        <option value="medium">Medium</option>
-                        <option value="low">Low</option>
-                    </select>
-                </div>
-
-                <div class="filter-group">
-                    <select id="sort-by">
-                        <option value="created-newest">Sort By: Newest</option>
-                        <option value="due-soonest">Sort By: Due Date</option>
-                        <option value="priority-high">Sort By: Priority</option>
-                    </select>
-                </div>
-                
-                <button id="clear-filters-btn" class="btn btn-secondary">Clear Filters</button>
             </div>
+            <div class="header-actions">
+                <button id="loadDemoBtn" class="btn btn-secondary"><i class="fa-solid fa-wand-magic-sparkles"></i> Load Demo</button>
+                <button id="archiveBtn" class="btn btn-secondary"><i class="fa-solid fa-box-archive"></i> Archive</button>
+                <button id="exportBtn" class="btn btn-secondary"><i class="fa-solid fa-download"></i> Export</button>
+                <button id="themeToggleBtn" class="btn btn-icon"><i class="fa-solid fa-moon"></i></button>
+            </div>
+        </header>
 
-            <div id="stats-bar" class="stats-bar">
-                <div class="stat-card">
-                    <span class="stat-label">Total Tasks</span>
-                    <span id="stat-total" class="stat-value">0</span>
+        <section class="stats-container">
+            <div class="stats-card card-total">
+                <div class="stats-info">
+                    <span>TOTAL TASKS</span>
+                    <strong id="statTotal">0</strong>
                 </div>
-                <div class="stat-card">
-                    <span class="stat-label">In Progress</span>
-                    <span id="stat-inprogress" class="stat-value">0</span>
+                <div class="stats-icon"><i class="fa-solid fa-cubes"></i></div>
+            </div>
+            <div class="stats-card card-progress">
+                <div class="stats-info">
+                    <span>IN PROGRESS</span>
+                    <strong id="statProgress">0</strong>
                 </div>
-                <div class="stat-card">
-                    <span class="stat-label">Completed</span>
-                    <span id="stat-completed" class="stat-value">0</span>
+                <div class="stats-icon spin-icon"><i class="fa-solid fa-spinner"></i></div>
+            </div>
+            <div class="stats-card card-completed">
+                <div class="stats-info">
+                    <span>COMPLETED</span>
+                    <strong id="statCompleted">0</strong>
                 </div>
-                <div class="stat-card" id="stat-overdue-wrapper">
-                    <span class="stat-label">Overdue</span>
-                    <span id="stat-overdue" class="stat-value">0</span>
+                <div class="stats-icon"><i class="fa-solid fa-circle-check"></i></div>
+            </div>
+            <div class="stats-card card-overdue">
+                <div class="stats-info">
+                    <span>OVERDUE</span>
+                    <strong id="statOverdue">0</strong>
                 </div>
-                <div class="stat-card progress-card">
-                    <span class="stat-label">Progress (<span id="progress-percent">0%</span>)</span>
-                    <div class="progress-bar-container">
-                        <div id="progress-bar-fill" class="progress-bar-fill"></div>
+                <div class="stats-icon blink-icon"><i class="fa-solid fa-circle-exclamation"></i></div>
+            </div>
+            <div class="stats-card card-rate">
+                <div class="stats-info-rate">
+                    <span>COMPLETION RATE</span>
+                    <strong id="statRate">0%</strong>
+                </div>
+                <div class="progress-bar-wrapper">
+                    <div id="statProgressFill" class="progress-bar-fill" style="width: 0%"></div>
+                </div>
+            </div>
+        </section>
+
+        <section class="filter-container">
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="searchInput" placeholder="Search tasks... (Press '/' to focus)">
+            </div>
+            <div class="filter-actions">
+                <div class="select-wrapper">
+                    <i class="fa-solid fa-filter icon-left"></i>
+                    <select id="priorityFilter">
+                        <option value="All">All Priorities</option>
+                        <option value="Low">Low</option>
+                        <option value="Medium">Medium</option>
+                        <option value="High">High</option>
+                    </select>
+                </div>
+                <div class="select-wrapper">
+                    <select id="sortBySelect">
+                        <option value="newest">Date Created (Newest)</option>
+                        <option value="oldest">Date Created (Oldest)</option>
+                        <option value="priority">Priority</option>
+                        <option value="dueDate">Due Date</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <main class="kanban-board">
+            <div class="kanban-column" data-status="To Do">
+                <div class="column-header">
+                    <div class="column-title">
+                        <span class="dot dot-todo"></span>
+                        <h2>To Do</h2>
+                        <span class="column-count" id="countTodo">0</span>
                     </div>
+                    <button class="btn-add-task open-modal-btn" data-column="To Do"><i class="fa-solid fa-plus"></i></button>
                 </div>
+                <div class="task-list" id="listTodo"></div>
             </div>
-        </section>
 
-        <nav class="responsive-tabs" id="column-tabs">
-            <button class="tab-link active" data-target="todo-column">To Do</button>
-            <button class="tab-link" data-target="inprogress-column">In Progress</button>
-            <button class="tab-link" data-target="done-column">Done</button>
-        </nav>
-
-        <section class="kanban-board">
-            <div id="todo-column" class="board-column active-tab-content">
+            <div class="kanban-column" data-status="In Progress">
                 <div class="column-header">
-                    <h2>To Do <span id="todo-count" class="count-badge">0</span></h2>
+                    <div class="column-title">
+                        <span class="dot dot-progress"></span>
+                        <h2>In Progress</h2>
+                        <span class="column-count" id="countProgress">0</span>
+                    </div>
+                    <button class="btn-add-task open-modal-btn" data-column="In Progress"><i class="fa-solid fa-plus"></i></button>
                 </div>
-                <div class="task-list" id="todo-tasks"></div>
+                <div class="task-list" id="listProgress"></div>
             </div>
 
-            <div id="inprogress-column" class="board-column">
+            <div class="kanban-column" data-status="Done">
                 <div class="column-header">
-                    <h2>In Progress <span id="inprogress-count" class="count-badge">0</span></h2>
+                    <div class="column-title">
+                        <span class="dot dot-done"></span>
+                        <h2>Done</h2>
+                        <span class="column-count" id="countDone">0</span>
+                    </div>
+                    <button class="btn-add-task open-modal-btn" data-column="Done"><i class="fa-solid fa-plus"></i></button>
                 </div>
-                <div class="task-list" id="inprogress-tasks"></div>
+                <div class="task-list" id="listDone"></div>
             </div>
+        </main>
+    </div>
 
-            <div id="done-column" class="board-column">
-                <div class="column-header">
-                    <h2>Done <span id="done-count" class="count-badge">0</span></h2>
-                </div>
-                <div class="task-list" id="done-tasks"></div>
-            </div>
-        </section>
-    </main>
-
-    <div id="task-modal" class="modal-overlay hidden">
-        <div class="modal-content">
+    <div class="modal-overlay" id="taskModal">
+        <div class="modal-content fade-in">
             <div class="modal-header">
-                <h3 id="modal-title">Create Task</h3>
-                <button id="close-modal-btn" class="close-btn">&times;</button>
+                <h3 id="modalTitleText">Create Task</h3>
+                <button class="close-modal-btn" id="closeModalBtn">&times;</button>
             </div>
-            <form id="task-form" novalidate>
-                <input type="hidden" id="task-id">
-                
+            <form id="taskForm">
+                <input type="hidden" id="taskId">
                 <div class="form-group">
-                    <label for="task-title-input">Title</label>
-                    <input type="text" id="task-title-input" placeholder="Enter title">
-                    <span class="error-msg" id="error-title"></span>
+                    <label for="taskTitle">Title</label>
+                    <input type="text" id="taskTitle" placeholder="Enter title">
+                    <span class="error-msg" id="titleError">Title must be at least 3 characters</span>
                 </div>
-
                 <div class="form-group">
-                    <label for="task-desc-input">Description</label>
-                    <textarea id="task-desc-input" rows="3" placeholder="Enter description"></textarea>
-                    <span class="error-msg" id="error-desc"></span>
+                    <label for="taskDescription">Description</label>
+                    <textarea id="taskDescription" rows="3" placeholder="Enter description"></textarea>
                 </div>
-
-                <div class="form-group">
-                    <label for="task-priority-input">Priority</label>
-                    <select id="task-priority-input">
-                        <option value="high">High</option>
-                        <option value="medium" selected>Medium</option>
-                        <option value="low">Low</option>
-                    </select>
-                    <span class="error-msg" id="error-priority"></span>
-                </div>
-
-                <div class="form-group">
-                    <label for="task-date-input">Due Date</label>
-                    <input type="date" id="task-date-input">
-                    <span class="error-msg" id="error-date"></span>
-                </div>
-
-                <div class="form-group">
-                    <label for="tag-input-field">Tags</label>
-                    <div class="tags-input-container">
-                        <div id="tags-pill-wrapper" class="tags-pill-wrapper"></div>
-                        <input type="text" id="tag-input-field" placeholder="Type tag and press Enter">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="taskPriority">Priority</label>
+                        <select id="taskPriority">
+                            <option value="Low">Low</option>
+                            <option value="Medium">Medium</option>
+                            <option value="High">High</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="taskDueDate">Due Date</label>
+                        <input type="date" id="taskDueDate">
+                        <span class="error-msg" id="dateError">Please select a due date</span>
                     </div>
                 </div>
-
                 <div class="form-group">
-                    <label for="task-column-input">Assigned Column</label>
-                    <select id="task-column-input">
-                        <option value="todo">To Do</option>
-                        <option value="inprogress">In Progress</option>
-                        <option value="done">Done</option>
-                    </select>
-                    <span class="error-msg" id="error-column"></span>
+                    <label for="taskTags">Tags <span class="label-hint">(Type tag and press Enter)</span></label>
+                    <div class="tags-input-container" id="tagsContainer">
+                        <input type="text" id="taskTagsInput" placeholder="Add a tag...">
+                    </div>
                 </div>
-
-                <div class="modal-actions">
-                    <button type="submit" id="save-task-btn" class="btn btn-primary">Create Task</button>
-                    <button type="button" id="cancel-task-btn" class="btn btn-secondary">Cancel</button>
+                <div class="form-group">
+                    <label for="taskColumn">Assigned Column</label>
+                    <select id="taskColumn">
+                        <option value="To Do">To Do</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Done">Done</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelModalBtn">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="saveTaskBtn">Create Task</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <div id="confirm-modal" class="modal-overlay hidden">
-        <div class="modal-content confirm-box">
-            <h3>Delete Task?</h3>
-            <p>Are you sure you want to permanently delete this task?</p>
-            <div class="modal-actions">
-                <button id="confirm-delete-btn" class="btn btn-danger">Delete</button>
-                <button id="confirm-cancel-btn" class="btn btn-secondary">Cancel</button>
+    <div class="modal-overlay" id="successModal">
+        <div class="modal-content text-center scale-up">
+            <div class="success-icon-circle">
+                <i class="fa-solid fa-check"></i>
             </div>
+            <h3>Task Created Successfully!</h3>
+            <button class="btn btn-primary" id="successOkBtn" style="min-width: 100px; margin-top: 20px;">OK</button>
         </div>
     </div>
-
-    
-
 
     <script src="js/storage.js"></script>
     <script src="js/tasks.js"></script>
